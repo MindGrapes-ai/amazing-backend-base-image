@@ -77,7 +77,10 @@ jobs:
       # Pull an existing image
       # Repo: https://github.com/marketplace/actions/checkout
       - name: Pull existing image
-        run: docker pull ${{ env.REGISTRY }}/${{ github.repository }}:main || true
+        run: |
+          docker pull \
+            ${{ env.REGISTRY }}/${{ github.repository | tolower }}:main \
+            || true
 
       # Setup Docker buildx
 
@@ -87,7 +90,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5.7.0
         with:
-          images: ${{ env.REGISTRY }}/${{ github.repository }}
+          images: ${{ env.REGISTRY }}/${{ github.repository | tolower }}
           tags: |
             type=sha,format=short,prefix=,suffix=
             type=sha,format=long,prefix=,suffix=
